@@ -158,6 +158,18 @@ function checkLength($value, $length) {
 }
 
 /**
+ * Prüft, ob eine Emailadresse korrekt ist oder nicht.
+ * @param   $value      Eingabewert
+ * @param   $empty      Die Email-Adresse kann leer sein (true) oder nicht (false)
+ */
+function checkEmail($value, $empty=false) {
+  $pattern_email = "/^[^@\s<&>]+@([-a-z0-9]+\.)+[a-z]{2,}$/i";
+  if ($empty && empty($value)) return true;
+  if (preg_match($pattern_email, $value)) return true;
+  else return false;
+}
+
+/**
  * Prüft, ob es sich beim übergebenen Wert um eine Zahl handelt.
  * @param   $value      übergebender Wert
  */
