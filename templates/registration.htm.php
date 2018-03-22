@@ -1,9 +1,9 @@
 <div class="col-md-12">
 <form name="kontakt" class="form-horizontal form-condensed" action="" method="post">
   <div class="form-group control-group">
-	<label class="control-label col-md-offset-2 col-md-2" for="username">Benutzername</label>
+	<label class="control-label col-md-offset-2 col-md-2" for="benutzername">Benutzername</label>
 	<div class="col-md-4">
-	  <input type="name" class="form-control" id="username" name="username" value="<?php echo getHtmlValue("username"); ?>" />
+	  <input type="name" class="form-control" id="benutzername" name="benutzername" value="<?php echo getHtmlValue("benutzername"); ?>" />
 	</div>
   </div>
   <div class="form-group control-group">
@@ -13,15 +13,15 @@
 	</div>
   </div>
   <div class="form-group control-group">
-	<label class="control-label col-md-offset-2 col-md-2" for="password">Passwort</label>
+	<label class="control-label col-md-offset-2 col-md-2" for="passwort">Passwort</label>
 	<div class="col-md-4">
-	  <input type="password" class="form-control" id="password" name="password" value="<?php echo getHtmlValue("password"); ?>" />
+	  <input type="password" class="form-control" id="passwort" name="passwort" value="<?php echo getHtmlValue("passwort"); ?>" />
 	</div>
   </div>
   <div class="form-group control-group">
-	<label class="control-label col-md-offset-2 col-md-2" for="password2">Passwort wiederholen</label>
+	<label class="control-label col-md-offset-2 col-md-2" for="passwort2">Passwort wiederholen</label>
 	<div class="col-md-4">
-	  <input type="password" class="form-control" id="password2" name="password2" value="<?php echo getHtmlValue("password2"); ?>" />
+	  <input type="password" class="form-control" id="passwort2" name="passwort2" value="<?php echo getHtmlValue("passwort2"); ?>" />
 	</div>
   </div>
   <div class="form-group control-group">

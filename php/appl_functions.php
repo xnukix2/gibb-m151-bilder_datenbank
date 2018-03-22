@@ -26,22 +26,34 @@ function registration() {
 
 			setValues($_POST);
 		} else {
+			db_insert_benutzer($_POST);
+
 			return header("Location: ".$_SERVER['PHP_SELF']."?id=login");
 		}
 	}
 	setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
 	return runTemplate( "../templates/".getValue("func").".htm.php" );
 }
+
+
+
+
+
+
 function checkMail() {
   $fehlermeldung = "";
 
-  if (!checkEmpty($_POST['username'], 3)) {
+  if (!checkEmpty($_POST['benutzername'], 3)) {
 	$fehlermeldung .= "Der Benutzername muss mind. 3 Zeichen lang sein. ";
-	$_POST["username"] = "";
+	$_POST["benutzername"] = "";
   }
   if (!checkEmail($_POST['email'])) {
 	$fehlermeldung .= "Falsches Format E-Mail. ";
 	$_POST["email"] = "";
+  }
+  if (!checkPasswort($_POST['passwort'])) {
+	$fehlermeldung .= "Falsches Passwort. ";
+	$_POST["passwort"] = "";
   }
   return $fehlermeldung;
 }

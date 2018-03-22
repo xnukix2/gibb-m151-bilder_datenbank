@@ -103,6 +103,10 @@ function getHtmlValue($key) {
 	else return "";
 }
 
+function escapeSpecialChars($attribut) {
+  return mysqli_real_escape_string(getValue("cfg_db"), $attribut);
+}
+
 /**
  * Übergebene SQL-Anweisung auf der DB ausführen und Resultat zurückgeben.
  * @param   $sql       Select-Befehl, welcher ausgeführt werden soll
@@ -166,6 +170,13 @@ function checkEmail($value, $empty=false) {
   $pattern_email = "/^[^@\s<&>]+@([-a-z0-9]+\.)+[a-z]{2,}$/i";
   if ($empty && empty($value)) return true;
   if (preg_match($pattern_email, $value)) return true;
+  else return false;
+}
+
+function checkPasswort($value, $empty=false) {
+  $pattern_pw = "/^[a-zA-Z][a-zA-Z0-9_!@#$%^&*().]{10,25}$/";
+  if ($empty && empty($value)) return true;
+  if (preg_match($pattern_pw, $value)) return true;
   else return false;
 }
 
