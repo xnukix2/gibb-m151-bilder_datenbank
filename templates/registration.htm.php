@@ -1,9 +1,9 @@
 <div class="col-md-12">
 <form name="kontakt" class="form-horizontal form-condensed" action="" method="post">
   <div class="form-group control-group">
-	<label class="control-label col-md-offset-2 col-md-2" for="benutzername">Benutzername</label>
+	<label class="control-label col-md-offset-2 col-md-2" for="nickname">Nickname</label>
 	<div class="col-md-4">
-	  <input type="name" class="form-control" id="benutzername" name="benutzername" value="<?php echo getHtmlValue("benutzername"); ?>" />
+	  <input type="name" class="form-control" id="nickname" name="nickname" value="<?php echo getHtmlValue("nickname"); ?>" />
 	</div>
   </div>
   <div class="form-group control-group">

@@ -43,18 +43,23 @@ function registration() {
 function checkMail() {
   $fehlermeldung = "";
 
-  if (!checkEmpty($_POST['benutzername'], 3)) {
-	$fehlermeldung .= "Der Benutzername muss mind. 3 Zeichen lang sein. ";
-	$_POST["benutzername"] = "";
-  }
-  if (!checkEmail($_POST['email'])) {
-	$fehlermeldung .= "Falsches Format E-Mail. ";
+  if(db_checkEmailNotExists($_POST['email'])){
+	$fehlermeldung .= "Email existiert bereits. ";
 	$_POST["email"] = "";
   }
+
+  if (!checkEmail($_POST['email'])) {
+	$fehlermeldung .= "Falsches Format der E-Mail. ";
+	$_POST["email"] = "";
+  }
+
   if (!checkPasswort($_POST['passwort'])) {
-	$fehlermeldung .= "Falsches Passwort. ";
+	$fehlermeldung .= "Passwort stimmt nicht mit den Vorgaben überein [1. Grossbuchstabe, 1. Zahl, 1. Sonderzeichen & mind. 8 Zeichen]. ";
 	$_POST["passwort"] = "";
   }
+  if ($_POST['passwort'] != $_POST['passwort2'])
+  $fehlermeldung .= "Passwörter sind nicht gleich. ";
+	$_POST["passwort2"] = "";
   return $fehlermeldung;
 }
 ?>
