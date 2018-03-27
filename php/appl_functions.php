@@ -63,7 +63,7 @@ function deinegalerien() {
 		if (isset($_POST["upload"])) {
 			if(count($_FILES) > 0) {
 				if(is_uploaded_file($_FILES['userImage']['tmp_name'])) {
-					uploadImage();
+					db_uploadImage();
 				}
 			}
 		}

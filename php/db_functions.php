@@ -40,15 +40,22 @@ function db_checkEmailAndPwd($email, $pwd) {
   }
 }
 
-function uploadImage() {
+function db_uploadImage() {
   $imgData =addslashes(file_get_contents($_FILES['userImage']['tmp_name']));
-  $imageProperties = getimageSize($_FILES['userImage']['tmp_name']);
+  $imageProperties = getImageSize($_FILES['userImage']['tmp_name']);
   
-  $sql = "INSERT INTO images(imageType ,imageData)
-  VALUES('{$imageProperties['mime']}', '{$imgData}')";
-  $current_id = $conn->query($sql);
+  //$sql = "INSERT INTO bilder(name, datei, galerieID)
+  //VALUES('{$imageProperties['mime']}', '{$imgData}', '1')";
+  $sql = "INSERT INTO bilder(name, datei, galerieID)
+  VALUES ('".escapeSpecialChars($imageProperties['mime'])."', '".escapeSpecialChars($imgData)."', '1')";
+  $current_id = mysqli_query(getValue("cfg_db"), $sql);
   if(isset($current_id)) {
-    header("Location: listImages.php");
+    header("Location: ".$_SERVER['PHP_SELF']."?id=galerien");
   }
+}
+
+function db_getImages() {
+  $sql = "SELECT bilderID FROM bilder ORDER BY bilderID DESC"; 
+  $result = mysqli_query(getValue("cfg_db"), $sql);
 }
 ?>
