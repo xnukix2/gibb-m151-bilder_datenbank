@@ -174,7 +174,9 @@ function checkEmail($value, $empty=false) {
 }
 
 function checkPasswort($value, $empty=false) {
-  $pattern_pw = "/^[a-zA-Z][a-zA-Z0-9_!@#$%^&*().]{10,25}$/";
+  //$pattern_pw = "/^[a-zA-Z][a-zA-Z0-9_!@#$%^&*().]{8,}$/";
+  $pattern_pw = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/";
+
   if ($empty && empty($value)) return true;
   if (preg_match($pattern_pw, $value)) return true;
   else return false;

@@ -9,17 +9,35 @@
  * Beinhaltet die Anwendungslogik zum Login
  */
 function login() {
-  // Template abfüllen und Resultat zurückgeben
-  setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
-  return runTemplate( "../templates/".getValue("func").".htm.php" );
+	/*if (isset($_SESSION)) {
+		session_destroy();
+	}*/
+	if (isset($_POST["login"])) {
+		$fehlermeldung = checkLogin();
+		if (strlen($fehlermeldung) > 0) {
+			setValue("meldung", $fehlermeldung);
+
+			setValues($_POST);
+		} else {
+			$_SESSION['session'] = $_POST['email'];
+			return header("Location: ".$_SERVER['PHP_SELF']."?id=galerien");
+		}
+	}
+
+	// Template abfüllen und Resultat zurückgeben
+	setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
+	return runTemplate( "../templates/".getValue("func").".htm.php" );
 }
 
 /*
  * Beinhaltet die Anwendungslogik zur Registration
  */
 function registration() {
+	if (isset($_SESSION['session'])) {
+		session_destroy();
+	}
 	if (isset($_POST["registrieren"])) {
-		$fehlermeldung = checkMail();
+		$fehlermeldung = checkValues();
 		// Wenn ein Fehler aufgetreten ist
 		if (strlen($fehlermeldung) > 0) {
 			setValue("meldung", $fehlermeldung);
@@ -35,26 +53,72 @@ function registration() {
 	return runTemplate( "../templates/".getValue("func").".htm.php" );
 }
 
+function galerien() {
+	setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
+	return runTemplate( "../templates/".getValue("func").".htm.php" );
+}
+
+function deinegalerien() {
+	if (isset($_SESSION['session'])) {
+		if (isset($_POST["upload"])) {
+			if(count($_FILES) > 0) {
+				if(is_uploaded_file($_FILES['userImage']['tmp_name'])) {
+					uploadImage();
+				}
+			}
+		}
+
+		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
+		return runTemplate( "../templates/".getValue("func").".htm.php" );
+	}
+}
 
 
+function logout() {
+	if (isset($_SESSION['session'])) {
+		if (isset($_POST["logout"])) {
+			session_destroy();
+			header("Location: ".$_SERVER['PHP_SELF']."?id=login");
+		}
+		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
+		return runTemplate( "../templates/".getValue("func").".htm.php" );
+	}
+}
 
+function checkValues() {
+	$fehlermeldung = "";
 
+	if(db_checkEmailExists($_POST['email'])){
+		$fehlermeldung .= "Email existiert bereits. ";
+		$_POST["email"] = "";
+	}
 
-function checkMail() {
-  $fehlermeldung = "";
+	else if (!checkEmail($_POST['email'])) {
+		$fehlermeldung .= "Falsches Format der E-Mail. ";
+		$_POST["email"] = "";
+	}
 
-  if (!checkEmpty($_POST['benutzername'], 3)) {
-	$fehlermeldung .= "Der Benutzername muss mind. 3 Zeichen lang sein. ";
-	$_POST["benutzername"] = "";
-  }
-  if (!checkEmail($_POST['email'])) {
-	$fehlermeldung .= "Falsches Format E-Mail. ";
-	$_POST["email"] = "";
-  }
-  if (!checkPasswort($_POST['passwort'])) {
-	$fehlermeldung .= "Falsches Passwort. ";
-	$_POST["passwort"] = "";
-  }
-  return $fehlermeldung;
+	if (!checkPasswort($_POST['passwort'])) {
+		$fehlermeldung .= "Min. 8 Zeichen, 1 Grossbuchstabe, 1 Kleinbuchstabe, 1 Ziffer. ";
+		$_POST["passwort"] = "";
+		$_POST["passwort2"] = "";
+	}
+
+	if ($_POST['passwort'] != $_POST['passwort2']) {
+		$fehlermeldung .= "Passwörter sind nicht gleich. ";
+		$_POST["passwort"] = "";
+		$_POST["passwort2"] = "";
+	}
+	return $fehlermeldung;
+}
+
+function checkLogin() {
+	$fehlermeldung = "";
+	if(!db_checkEmailAndPwd($_POST['email'], $_POST['passwort'])){
+		$fehlermeldung .= "Falsche Logindaten. ";
+		$_POST["email"] = "";
+		$_POST["passwort"] = "";
+	}
+	return $fehlermeldung;
 }
 ?>
