@@ -49,7 +49,7 @@
 		    <span class="glyphicon glyphicon-chevron-right"></span>
 		  </a>
 		</div>
-		  <p>Geil</p>
+		  <p>Geiler</p>
   </div>
 </form>
 </div>
