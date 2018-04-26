@@ -1,5 +1,5 @@
 <div class="col-md-12">
-<form name="kontakt" class="form-horizontal form-condensed" action="" method="post">
+<form name="registration" class="form-horizontal form-condensed" action="" method="post">
   <div class="form-group control-group">
 	<label class="control-label col-md-offset-2 col-md-2" for="nickname">Nickname</label>
 	<div class="col-md-4">
