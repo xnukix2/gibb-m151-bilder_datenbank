@@ -54,8 +54,10 @@ function registration() {
 }
 
 function galerien() {
-	setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
-	return runTemplate( "../templates/".getValue("func").".htm.php" );
+	if (isset($_SESSION['session'])) {
+		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
+		return runTemplate( "../templates/".getValue("func").".htm.php" );
+	}
 }
 
 function deinegalerien() {
@@ -99,7 +101,7 @@ function checkValues() {
 	}
 
 	if (!checkPasswort($_POST['passwort'])) {
-		$fehlermeldung .= "Min. 8 Zeichen, 1 Grossbuchstabe, 1 Kleinbuchstabe, 1 Ziffer. ";
+		$fehlermeldung .= "Min. 8 Zeichen, 1 Grossbuchstabe, 1 Kleinbuchstabe, 1 Ziffer, 1 Sonderzeichen. ";
 		$_POST["passwort"] = "";
 		$_POST["passwort2"] = "";
 	}

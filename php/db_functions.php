@@ -44,10 +44,10 @@ function db_uploadImage() {
   $imgData =addslashes(file_get_contents($_FILES['userImage']['tmp_name']));
   $imageProperties = getImageSize($_FILES['userImage']['tmp_name']);
   
-  //$sql = "INSERT INTO bilder(name, datei, galerieID)
-  //VALUES('{$imageProperties['mime']}', '{$imgData}', '1')";
   $sql = "INSERT INTO bilder(name, datei, galerieID)
-  VALUES ('".escapeSpecialChars($imageProperties['mime'])."', '".escapeSpecialChars($imgData)."', '1')";
+  VALUES('{$imageProperties['mime']}', '{$imgData}', '1')";
+  //$sql = "INSERT INTO bilder(name, datei, galerieID)
+  //VALUES ('".escapeSpecialChars($imageProperties['mime'])."', '".escapeSpecialChars($imgData)."', '1')";
   $current_id = mysqli_query(getValue("cfg_db"), $sql);
   if(isset($current_id)) {
     header("Location: ".$_SERVER['PHP_SELF']."?id=galerien");

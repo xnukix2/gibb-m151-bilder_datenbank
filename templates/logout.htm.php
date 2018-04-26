@@ -2,7 +2,7 @@
 <form name="logout" class="form-horizontal form-condensed" action="" method="post">
   <div class="form-group control-group">
 	<div class="col-md-offset-4 col-md-4">
-	  <button type="submit" class="btn btn-danger" name="logout" id="logout">Logout</button>
+	  <button type="submit" class="btn btn-danger" name="logout" id="logout" onclick="return confirm('Willst du dich wirklich ausloggen?')">Logout</button>
 	</div>
   </div>
 </form>
