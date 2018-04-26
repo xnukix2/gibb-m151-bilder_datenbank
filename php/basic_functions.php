@@ -18,11 +18,11 @@ function getId() {
  * Gibt den Inhalt eines POST-Attributes zurück
  */
 function getPost($attr, $defvalue="") {
-	$value = $defvalue;
-	if (isset($_POST[$attr])) {
-		if (!empty($_POST[$attr])) $value = $_POST[$attr];
-	}
-	return $value;
+  $value = $defvalue;
+  if (isset($_POST[$attr])) {
+    if (!empty($_POST[$attr])) $value = $_POST[$attr];
+  }
+  return $value;
 }
 
 /* Führt ein HTML-Template aus und gibt das Produkt zurück
@@ -57,9 +57,9 @@ function setValue($key, $value) {
 function setValues($list) {
   global $params;
   if (count($list)) {
-	foreach ($list as $k=>$v) {
-	  $params[$k] = $v;
-	}
+  foreach ($list as $k=>$v) {
+    $params[$k] = $v;
+  }
   }
 }
 
@@ -81,14 +81,14 @@ function getValue($key) {
 function getMenu($mlist) {
   $menu = "";
   if (count($mlist)) {
-	$active_link = getValue("func");
-	if (empty($active_link)) $active_link=key($mlist);
-	foreach ($mlist as $element=>$option) {
-	  $active = "";
-	  if ($element == $active_link) $active = " class='active'";
-	  $menu .= "<li$active><a href='".$_SERVER['PHP_SELF']."?id=".$element."'>$option</a></li>";
-	}
-	return $menu;
+  $active_link = getValue("func");
+  if (empty($active_link)) $active_link=key($mlist);
+  foreach ($mlist as $element=>$option) {
+    $active = "";
+    if ($element == $active_link) $active = " class='active'";
+    $menu .= "<li$active><a href='".$_SERVER['PHP_SELF']."?id=".$element."'>$option</a></li>";
+  }
+  return $menu;
   }
 }
 
@@ -99,8 +99,8 @@ function getMenu($mlist) {
  */
 function getHtmlValue($key) {
     global $params;
-	if (isset($params[$key])) return htmlentities($params[$key]);
-	else return "";
+  if (isset($params[$key])) return htmlentities($params[$key]);
+  else return "";
 }
 
 function escapeSpecialChars($attribut) {
@@ -112,13 +112,13 @@ function escapeSpecialChars($attribut) {
  * @param   $sql       Select-Befehl, welcher ausgeführt werden soll
  */
 function sqlSelect($sql) {
- 	$result = mysqli_query(getValue("cfg_db"), $sql);
- 	if (!$result) die("Fehler: ".mysqli_error());
-	if (mysqli_num_rows($result) > 0) {
-		while ($row=mysqli_fetch_assoc($result)) $data[]=$row;
-	} else $data = "";
-	mysqli_free_result($result);
-	return $data;
+  $result = mysqli_query(getValue("cfg_db"), $sql);
+  if (!$result) die("Fehler: ".mysqli_error());
+  if (mysqli_num_rows($result) > 0) {
+    while ($row=mysqli_fetch_assoc($result)) $data[]=$row;
+  } else $data = "";
+  mysqli_free_result($result);
+  return $data;
 }
 
 /**
@@ -126,8 +126,8 @@ function sqlSelect($sql) {
  * @param   $sql    SQL-Befehl, welcher ausgeführt werden soll
  */
  function sqlQuery($sql) {
-	$result = mysqli_query(getValue("cfg_db"), $sql);
- 	if (!$result) die(mysqli_error(getValue("cfg_db"))."<pre>".$sql."</pre>");
+  $result = mysqli_query(getValue("cfg_db"), $sql);
+  if (!$result) die(mysqli_error(getValue("cfg_db"))."<pre>".$sql."</pre>");
 }
 
 /**
@@ -174,13 +174,9 @@ function checkEmail($value, $empty=false) {
 }
 
 function checkPasswort($value, $empty=false) {
-<<<<<<< HEAD
-  $pattern_pw = "/^[a-zA-Z][a-zA-Z0-9_!@#$%^&*().]{8,}$/";
-=======
   //$pattern_pw = "/^[a-zA-Z][a-zA-Z0-9_!@#$%^&*().]{8,}$/";
   $pattern_pw = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*-_.]).{8,}$/";
 
->>>>>>> fffa28c24e4e1a5a2b196fc78e54599a54e336a4
   if ($empty && empty($value)) return true;
   if (preg_match($pattern_pw, $value)) return true;
   else return false;

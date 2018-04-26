@@ -106,26 +106,6 @@ function checkValues() {
 		$_POST["passwort2"] = "";
 	}
 
-<<<<<<< HEAD
-  if(db_checkEmailNotExists($_POST['email'])){
-	$fehlermeldung .= "Email existiert bereits. ";
-	$_POST["email"] = "";
-  }
-
-  if (!checkEmail($_POST['email'])) {
-	$fehlermeldung .= "Falsches Format der E-Mail. ";
-	$_POST["email"] = "";
-  }
-
-  if (!checkPasswort($_POST['passwort'])) {
-	$fehlermeldung .= "Passwort stimmt nicht mit den Vorgaben überein [1. Grossbuchstabe, 1. Zahl, 1. Sonderzeichen & mind. 8 Zeichen]. ";
-	$_POST["passwort"] = "";
-  }
-  if ($_POST['passwort'] != $_POST['passwort2'])
-  $fehlermeldung .= "Passwörter sind nicht gleich. ";
-	$_POST["passwort2"] = "";
-  return $fehlermeldung;
-=======
 	if ($_POST['passwort'] != $_POST['passwort2']) {
 		$fehlermeldung .= "Passwörter sind nicht gleich. ";
 		$_POST["passwort"] = "";
@@ -142,6 +122,5 @@ function checkLogin() {
 		$_POST["passwort"] = "";
 	}
 	return $fehlermeldung;
->>>>>>> fffa28c24e4e1a5a2b196fc78e54599a54e336a4
 }
 ?>
