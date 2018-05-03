@@ -9,6 +9,21 @@
   </div>
 </div>
 <?php
+		if(count($_FILES) > 0) {
+			if(is_uploaded_file($_FILES['userImage']['tmp_name'])) {
+				$imgData =addslashes(file_get_contents($_FILES['userImage']['tmp_name']));
+				  $imageProperties = getImageSize($_FILES['userImage']['tmp_name']);
+				  
+				  $sql = "INSERT INTO bilder(name, datei, galerieID)
+				  VALUES('{$imageProperties['mime']}', '{$imgData}', '1')";
+				  //$sql = "INSERT INTO bilder(name, datei, galerieID)
+				  //VALUES ('".escapeSpecialChars($imageProperties['mime'])."', '".escapeSpecialChars($imgData)."', '1')";
+				  $current_id = mysqli_query(getValue("cfg_db"), $sql);
+				  if(isset($current_id)) {
+				    header("Location: ".$_SERVER['PHP_SELF']."?id=galerien");
+				  }
+			}
+		}
 
 	$meldung = getValue("meldung");
 	if (strlen($meldung) > 0) echo "<div class='col-md-offset-2 col-md-6 alert alert-danger'>$meldung</div>";

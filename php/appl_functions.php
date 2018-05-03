@@ -59,6 +59,12 @@ function galerien() {
 		return runTemplate( "../templates/".getValue("func").".htm.php" );
 	}
 }
+function galerie() {
+	if (isset($_SESSION['session'])) {
+		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
+		return runTemplate( "../templates/".getValue("func").".htm.php" );
+	}
+}
 
 function deinegalerien() {
 	if (isset($_SESSION['session'])) {

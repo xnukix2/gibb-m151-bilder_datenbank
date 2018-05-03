@@ -6,7 +6,7 @@
  */
 
 // Funktionen
-setValue("cfg_func_list", array("login","registration","logout","galerien","deinegalerien"));
+setValue("cfg_func_list", array("login","registration","logout","galerien","galerie","deinegalerien"));
 // Inhalt des Menus
 if (isset($_SESSION["session"])) {
 	setValue("cfg_menu_list", array("logout"=>"Logout","galerien"=>"Galerien","deinegalerien"=>"Deine Galerien"));
