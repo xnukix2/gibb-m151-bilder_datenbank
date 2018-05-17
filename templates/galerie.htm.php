@@ -1,5 +1,6 @@
 <?php
-  	$sql = "SELECT bilderID FROM bilder
+  	$sql = "SELECT bilderID FROM bilder AS b
+  	LEFT JOIN galerie AS g ON b.galerieID = g.galerieID
   	ORDER BY bilderID";
   	$result = getValue("cfg_db")->query($sql);
   	$result2 = getValue("cfg_db")->query($sql);
@@ -59,6 +60,14 @@
 		    <span class="glyphicon glyphicon-chevron-right"></span>
 		  </a>
 		</div>
+
+	<div class="col-md-4">
+		<label>Bild hochladen:</label><br/>
+		<input name="userImage" type="file" class="inputFile" />
+		<button type="submit" class="btn btn-success" name="upload" id="upload">Hochladen</button>
+		<br/><label>Bild Name:</label><br/>
+		<input type="text" name="inputNameBild">
+	</div>
   </div>
 </form>
 </div>

@@ -75,6 +75,13 @@ function deinegalerien() {
 				}
 			}
 		}
+		if (isset($_POST["btnGalerieErstellen"])) {
+			$name = $_POST["inputGalerieName"];
+			if (isset($_POST["inputGalerieBeschreibung"])) {
+				$beschreibung = $_POST["inputGalerieBeschreibung"];
+			}
+			db_galerieErstellen($name, $beschreibung, $_SESSION['session']);
+		}
 
 		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
 		return runTemplate( "../templates/".getValue("func").".htm.php" );

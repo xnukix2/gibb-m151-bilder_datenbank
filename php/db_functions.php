@@ -40,6 +40,22 @@ function db_checkEmailAndPwd($email, $pwd) {
   }
 }
 
+function db_galerieErstellen($name, $beschreibung, $benutzerID) {
+   $sql = "SELECT benutzerID FROM benutzer WHERE email = 'user@user.ch'";
+  $result = mysqli_query(getValue("cfg_db"), $sql);
+
+  $row = mysqli_fetch_assoc($result);
+  var_dump($row['benutzerID']);
+  exit();
+
+  $benutzerID = $row['benutzerID'];
+
+
+  $sql = "INSERT INTO galerie(name, beschreibung, benutzerID)
+  VALUES('".$name."', '".$beschreibung."', '".$benutzerID."')";
+  sqlQuery($sql);
+}
+
 function db_uploadImage() {
   $imgData =addslashes(file_get_contents($_FILES['userImage']['tmp_name']));
   $imageProperties = getImageSize($_FILES['userImage']['tmp_name']);

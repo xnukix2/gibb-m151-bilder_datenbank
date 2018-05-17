@@ -14,7 +14,7 @@
 		while($row = $result->fetch_assoc()) {
 		?>
 		<a href="index.php?id=galerie">
-			<img id="upl_image" src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>" class="img-thumbnail"><br/>
+			<img style="height: 200px;" id="upl_image" src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>" class="img-thumbnail"><br/>
 		</a>
 	
 		<?php		
