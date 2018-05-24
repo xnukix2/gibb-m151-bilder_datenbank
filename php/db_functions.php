@@ -14,6 +14,7 @@ function db_benutzer_by_id($email) {
 
   setValue("benutzerID", $benutzerID);
 }
+
 function db_insert_benutzer($params) {
   $sql = "insert into benutzer (nickname, email, passwort)
   values ('".escapeSpecialChars($params['nickname'])."','".escapeSpecialChars($params['email'])."','".sha1(escapeSpecialChars($params['passwort']))."')";
@@ -65,7 +66,7 @@ function db_galerie_bearbeiten($name, $beschreibung, $galerieID) {
   sqlQuery($sql);
 }
 
-function db_uploadImage() {
+/*function db_uploadImage() {
   $imgData =addslashes(file_get_contents($_FILES['userImage']['tmp_name']));
   $imageProperties = getImageSize($_FILES['userImage']['tmp_name']);
   
@@ -77,7 +78,7 @@ function db_uploadImage() {
   if(isset($current_id)) {
     header("Location: ".$_SERVER['PHP_SELF']."?id=galerien");
   }
-}
+}*/
 
 function db_bild_bearbeiten($name, $bildID) {
   $sql = "UPDATE bilder SET name='".$name."'
