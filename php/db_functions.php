@@ -6,6 +6,14 @@
  *  Die Funktionen formulieren die SQL-Anweisungen und rufen dann die Funktionen
  *  sqlQuery() und sqlSelect() aus dem Modul basic_functions.php auf.
  */
+function db_benutzer_by_id($email) {
+  $sql = "select benutzerID from benutzer where email = '".$email."'";
+  $result = mysqli_query(getValue("cfg_db"), $sql);
+  $row = mysqli_fetch_assoc($result);
+  $benutzerID = $row['benutzerID'][0];
+
+  setValue("benutzerID", $benutzerID);
+}
 function db_insert_benutzer($params) {
   $sql = "insert into benutzer (nickname, email, passwort)
   values ('".escapeSpecialChars($params['nickname'])."','".escapeSpecialChars($params['email'])."','".sha1(escapeSpecialChars($params['passwort']))."')";
@@ -40,19 +48,20 @@ function db_checkEmailAndPwd($email, $pwd) {
   }
 }
 
-function db_galerieErstellen($name, $beschreibung, $benutzerID) {
-   $sql = "SELECT benutzerID FROM benutzer WHERE email = 'user@user.ch'";
+function db_galerie_erstellen($name, $beschreibung, $benutzerID) {
+  $sql = "SELECT benutzerID FROM benutzer WHERE benutzerID = ".$benutzerID;
   $result = mysqli_query(getValue("cfg_db"), $sql);
-
   $row = mysqli_fetch_assoc($result);
-  var_dump($row['benutzerID']);
-  exit();
-
-  $benutzerID = $row['benutzerID'];
-
+  $benutzerID = $row['benutzerID'][0];
 
   $sql = "INSERT INTO galerie(name, beschreibung, benutzerID)
   VALUES('".$name."', '".$beschreibung."', '".$benutzerID."')";
+  sqlQuery($sql);
+}
+
+function db_galerie_bearbeiten($name, $beschreibung, $galerieID) {
+  $sql = "UPDATE galerie SET name='".$name."', beschreibung='".$beschreibung."'
+  WHERE galerieID=".$galerieID;
   sqlQuery($sql);
 }
 
@@ -68,6 +77,18 @@ function db_uploadImage() {
   if(isset($current_id)) {
     header("Location: ".$_SERVER['PHP_SELF']."?id=galerien");
   }
+}
+
+function db_bild_bearbeiten($name, $bildID) {
+  $sql = "UPDATE bilder SET name='".$name."'
+  WHERE bilderID=".$bildID;
+  sqlQuery($sql);
+}
+
+function db_bild_löschen($bildID) {
+  $sql = "DELETE FROM bilder
+  WHERE bilderID=".$bildID;
+  sqlQuery($sql);
 }
 
 function db_getImages() {

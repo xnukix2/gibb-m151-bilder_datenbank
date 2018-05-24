@@ -6,13 +6,15 @@
  */
 
 // Funktionen
-setValue("cfg_func_list", array("login","registration","logout","galerien","galerie","deinegalerien"));
+setValue("cfg_func_list", array("registration","login","logout","öffentliche_galerien","galerien","geschützte_galerien","deine_galerien","galerie"));
 // Inhalt des Menus
 if (isset($_SESSION["session"])) {
-	setValue("cfg_menu_list", array("logout"=>"Logout","galerien"=>"Galerien","deinegalerien"=>"Deine Galerien"));
+	setValue("cfg_menu_list", array("öffentliche_galerien"=>"Öffentliche Galerien","deine_galerien"=>"Deine Galerien"));
+	setValue("cfg_menu_right_list", array("logout"=>"Logout"));
 }
 else {
-	setValue("cfg_menu_list", array("login"=>"Login","registration"=>"Registration"));
+	setValue("cfg_menu_list", array("öffentliche_galerien"=>"Öffentliche Galerien","geschützte_galerien"=>"Geschützte Galerien"));
+	setValue("cfg_menu_right_list", array("registration"=>"Registration","login"=>"Login"));
 }
 
 // Datenbankverbindung herstellen

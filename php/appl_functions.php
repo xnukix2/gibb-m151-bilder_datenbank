@@ -5,13 +5,7 @@
  *  Dieses Modul beinhaltet Funktionen, welche die Anwendungslogik implementieren.
  */
 
-/*
- * Beinhaltet die Anwendungslogik zum Login
- */
 function login() {
-	/*if (isset($_SESSION)) {
-		session_destroy();
-	}*/
 	if (isset($_POST["login"])) {
 		$fehlermeldung = checkLogin();
 		if (strlen($fehlermeldung) > 0) {
@@ -19,19 +13,15 @@ function login() {
 
 			setValues($_POST);
 		} else {
-			$_SESSION['session'] = $_POST['email'];
-			return header("Location: ".$_SERVER['PHP_SELF']."?id=galerien");
+			db_benutzer_by_id($_POST['email']);
+			$_SESSION['session'] = getValue("benutzerID");
+			redirect("deine_galerien");
 		}
 	}
-
-	// Template abfüllen und Resultat zurückgeben
 	setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
 	return runTemplate( "../templates/".getValue("func").".htm.php" );
 }
 
-/*
- * Beinhaltet die Anwendungslogik zur Registration
- */
 function registration() {
 	if (isset($_SESSION['session'])) {
 		session_destroy();
@@ -45,42 +35,119 @@ function registration() {
 			setValues($_POST);
 		} else {
 			db_insert_benutzer($_POST);
-
-			return header("Location: ".$_SERVER['PHP_SELF']."?id=login");
+			redirect("login");
 		}
 	}
 	setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
 	return runTemplate( "../templates/".getValue("func").".htm.php" );
 }
 
-function galerien() {
-	if (isset($_SESSION['session'])) {
-		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
-		return runTemplate( "../templates/".getValue("func").".htm.php" );
-	}
+function öffentliche_galerien() {
+	setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
+	return runTemplate( "../templates/".getValue("func").".htm.php" );
 }
+
+function geschützte_galerien() {
+	if (isset($_POST["login"])) {
+		$fehlermeldung = checkLogin();
+		if (strlen($fehlermeldung) > 0) {
+			setValue("meldung", $fehlermeldung);
+
+			setValues($_POST);
+		} else {
+			db_benutzer_by_id($_POST['email']);
+			$_SESSION['session'] = getValue("benutzerID");
+			redirect("deine_galerien");
+		}
+	}
+	setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
+	return runTemplate( "../templates/".getValue("func").".htm.php" );
+}
+
 function galerie() {
 	if (isset($_SESSION['session'])) {
+		if (isset($_POST["btnUpload"])) {
+			if (isset($_POST["inputNameBild"])) {
+				$bildName = $_POST["inputNameBild"];
+			} else {
+				$bildName = "";
+			}
+			$gid = $_SESSION["gid"];
+			if(count($_FILES) > 0) {
+				if($_FILES['userImage']['size'] > 4194304) {
+					setValue("meldung", "Zu grosse Datei");
+				} else {
+			        if(is_uploaded_file($_FILES['userImage']['tmp_name'])) {
+			        	$imgData = addslashes(file_get_contents($_FILES['userImage']['tmp_name']));
+			        	$imgProperties = getimageSize($_FILES['userImage']['tmp_name']);
+			        	
+			        	$sql = "INSERT INTO bilder(name, art, datei, galerieID)
+			        	VALUES('".$bildName."', '".$imgProperties['mime']."', '".$imgData."', '".$gid."')";
+			        	
+			        	sqlQuery($sql);
+			        }
+			    }
+		    }
+		}
+
+		if (isset($_POST["btnBildBearbeiten"])) {
+			if (isset($_POST["inputNameBildBearbeiten"])) {
+				$name = $_POST["inputNameBildBearbeiten"];
+			} else {
+				$name = "";
+			}
+			db_bild_bearbeiten($name, $_POST['btnBildBearbeiten']);
+		}
+
+		if (isset($_POST["btnBildLöschen"])) {
+			db_bild_löschen($_POST['btnBildLöschen']);
+		}
+
 		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
 		return runTemplate( "../templates/".getValue("func").".htm.php" );
 	}
 }
 
-function deinegalerien() {
+function deine_galerien() {
 	if (isset($_SESSION['session'])) {
-		if (isset($_POST["upload"])) {
-			if(count($_FILES) > 0) {
-				if(is_uploaded_file($_FILES['userImage']['tmp_name'])) {
-					db_uploadImage();
-				}
-			}
-		}
 		if (isset($_POST["btnGalerieErstellen"])) {
 			$name = $_POST["inputGalerieName"];
-			if (isset($_POST["inputGalerieBeschreibung"])) {
-				$beschreibung = $_POST["inputGalerieBeschreibung"];
+			$fehlermeldung = checkEmpty($name, 3);
+			if (strlen($fehlermeldung) == 0) {
+				setValue("meldung", "Bitte längeren Namen eingeben");
+
+				setValues($_POST);
+			} else {
+				if (isset($_POST["inputGalerieBeschreibung"])) {
+					$beschreibung = $_POST["inputGalerieBeschreibung"];
+				} else {
+					$beschreibung = "";
+				}
+				db_galerie_erstellen($name, $beschreibung, $_SESSION['session']);
 			}
-			db_galerieErstellen($name, $beschreibung, $_SESSION['session']);
+		}
+
+		if (isset($_POST["btnGalerieBearbeiten"])) {
+			$name = $_POST["inputGalerieNameBearbeiten"];
+			$fehlermeldung = checkEmpty($name, 3);
+			if (strlen($fehlermeldung) == 0) {
+				setValue("meldung", "Bitte längeren Namen eingeben");
+
+				setValues($_POST);
+			} else {
+				if (isset($_POST["inputGalerieBeschreibungBearbeiten"])) {
+					$beschreibung = $_POST["inputGalerieBeschreibungBearbeiten"];
+				} else {
+					$beschreibung = "";
+				}
+				db_galerie_bearbeiten($name, $beschreibung, $_POST['btnGalerieBearbeiten']);
+			}
+		}
+
+		if (isset($_POST["btnGalerieAnzeigen"])) {
+			$gid = $_POST["btnGalerieAnzeigen"];
+			$_SESSION["gid"] = $gid;
+			redirect("galerie");
 		}
 
 		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
@@ -93,10 +160,12 @@ function logout() {
 	if (isset($_SESSION['session'])) {
 		if (isset($_POST["logout"])) {
 			session_destroy();
-			header("Location: ".$_SERVER['PHP_SELF']."?id=login");
+			redirect("login");
 		}
 		setValue("phpmodule", $_SERVER['PHP_SELF']."?id=".getValue("func"));
 		return runTemplate( "../templates/".getValue("func").".htm.php" );
+	} else {
+		redirect("login");
 	}
 }
 
@@ -109,12 +178,12 @@ function checkValues() {
 	}
 
 	else if (!checkEmail($_POST['email'])) {
-		$fehlermeldung .= "Falsches Format der E-Mail. ";
+		$fehlermeldung .= "Keine gültige E-Mail. ";
 		$_POST["email"] = "";
 	}
 
 	if (!checkPasswort($_POST['passwort'])) {
-		$fehlermeldung .= "Min. 8 Zeichen, 1 Grossbuchstabe, 1 Kleinbuchstabe, 1 Ziffer, 1 Sonderzeichen. ";
+		$fehlermeldung .= "Kein gültiges Passwort, Min. 8 Zeichen, 1 Grossbuchstabe, 1 Kleinbuchstabe, 1 Ziffer, 1 Sonderzeichen. ";
 		$_POST["passwort"] = "";
 		$_POST["passwort2"] = "";
 	}

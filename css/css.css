@@ -1,0 +1,23 @@
+h2 {
+	display: inline;
+}
+.thumb {
+	position: relative;
+	width: 300px;
+	height: 300px;
+	overflow: hidden;
+}
+.thumb img {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	height: 100%;
+	width: auto;
+	-webkit-transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+}
+.thumb img.portrait {
+	width: 100%;
+	height: auto;
+}
