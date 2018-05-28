@@ -34,6 +34,10 @@
 		  		<button data-toggle="collapse" data-target="#bearbeiten<?php echo $row['galerieID'] ?>" type="button" class="btn btn-link">
 		        	<span class="glyphicon glyphicon-pencil"></span>
 		        </button>
+
+		        <button type="submit" name="btnGalerieLöschen" value="<?php echo $row['galerieID'] ?>" class="btn btn-link">
+		        	<span class="glyphicon glyphicon-trash"></span>
+		        </button>
 		  	</div>
 		  	<div class="panel-body">
 		  		<div id="bearbeiten<?php echo $row['galerieID'] ?>" class="collapse panel panel-default">

@@ -26,10 +26,11 @@
 	  	</div>
   	</div>
 
-	
+	<div class="row">
   	<?php
   	while($row = $result3->fetch_assoc()) {
   	?>
+  		<div class="col-sm-4">
   		<div class="panel panel-default">
 		  	<div class="panel-heading">
 		  		<h2><?php echo $row["name"]; ?></h2>
@@ -50,13 +51,15 @@
 				  	</div>
 			  	</div>
 		  		<button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal">
-		  			<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>" id="upl_image" style="height: 200px;">
+		  			<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>" id="upl_image" style="height: 200px; clip: rect(0, 200px, 200px, 0);">
 		  		</button>
 		  	</div>
+	  	</div>
 	  	</div>
   	<?php
   	}
   	?>
+  	</div>
   	<div class="modal fade" id="modal" role="dialog">
 	    <div class="modal-dialog">
 	    	<div class="modal-content">

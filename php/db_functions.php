@@ -60,6 +60,15 @@ function db_galerie_erstellen($name, $beschreibung, $benutzerID) {
   sqlQuery($sql);
 }
 
+function db_galerie_löschen($galerieID) {
+  $sql = "DELETE FROM bilder
+  WHERE galerieID=".$galerieID;
+  sqlQuery($sql);
+  $sql = "DELETE FROM galerie
+  WHERE galerieID=".$galerieID;
+  sqlQuery($sql);
+}
+
 function db_galerie_bearbeiten($name, $beschreibung, $galerieID) {
   $sql = "UPDATE galerie SET name='".$name."', beschreibung='".$beschreibung."'
   WHERE galerieID=".$galerieID;

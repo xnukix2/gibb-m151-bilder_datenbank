@@ -79,10 +79,16 @@ function galerie() {
 				} else {
 			        if(is_uploaded_file($_FILES['userImage']['tmp_name'])) {
 			        	$imgData = addslashes(file_get_contents($_FILES['userImage']['tmp_name']));
+			        	$img = imagecreatefrompng($_FILES['userImage']['name']);
+			        	$size = min(imagesx($img), imagesy($img));
+			        	$imgCrop = imagecrop($img, ['x'=>0, 'y'=>0, 'width'=>$size, 'height'=>$size]);
 			        	$imgProperties = getimageSize($_FILES['userImage']['tmp_name']);
 			        	
-			        	$sql = "INSERT INTO bilder(name, art, datei, galerieID)
-			        	VALUES('".$bildName."', '".$imgProperties['mime']."', '".$imgData."', '".$gid."')";
+			        	//$sql = "INSERT INTO bilder(name, art, datei, galerieID)
+			        	//VALUES('".$bildName."', '".$imgProperties['mime']."', '".$imgData."', '".$gid."')";
+
+			        	$sql = "INSERT INTO bilder(name, art, datei, thumb, galerieID)
+			        	VALUES('".$bildName."', '".$imgProperties['mime']."', '".$imgData."', '".$imgCrop."', '".$gid."')";
 			        	
 			        	sqlQuery($sql);
 			        }
@@ -142,6 +148,10 @@ function deine_galerien() {
 				}
 				db_galerie_bearbeiten($name, $beschreibung, $_POST['btnGalerieBearbeiten']);
 			}
+		}
+
+		if (isset($_POST["btnGalerieLöschen"])) {
+			db_galerie_löschen($_POST['btnGalerieLöschen']);
 		}
 
 		if (isset($_POST["btnGalerieAnzeigen"])) {
