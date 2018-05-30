@@ -3,7 +3,14 @@
   	RIGHT JOIN galerie AS g ON b.galerieID = g.galerieID
   	GROUP BY g.galerieID";
   	$result = getValue("cfg_db")->query($sql);
-	//$result = mysqli_query(getValue("cfg_db"), $sql);
+
+  	$dir = "../images/thumb/";
+   	$k = 0;
+  	foreach (glob("{$dir}*.{jpg, png, jpeg, gif}", GLOB_BRACE) as $key) {
+  		$image_names[$k] = substr($key, -5, -4);
+  		$k++;
+  	}
+  	$images = glob("{$dir}*.{jpg, png, jpeg, gif}", GLOB_BRACE);
 
 ?>
 
@@ -11,6 +18,7 @@
 <form name="öffentliche_galerien" class="form-horizontal form-condensed" action="" method="post">
   <div class="form-group control-group">
 	  	<?php
+  		$i = 0;
 		while($row = $result->fetch_assoc()) {
 		?>
 		<div class="panel panel-default">
@@ -20,56 +28,21 @@
 		  		</button>
 		  	</div>
 		  	<div class="panel-body">
-		  		<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>" id="upl_image" style="height: 200px;">
+		  		<?php
+	  			if(in_array($row['bilderID'], $image_names)) {
+						$num = $images[$i];
+  				?>
+		  			<img src="<?php echo $num; ?>" id="upl_image">
+		  		<?php
+		  		}
+  				$i += 1;
+		  		?>
 		  		<p><?php echo $row["beschreibung"]; ?></p>
 		  	</div>
 	  	</div>
 		<?php		
 			}
 		?>
-	  <!--<div id="demo" class="carousel slide" data-ride="carousel">
-		  <ul class="carousel-indicators">
-		    <li data-target="#demo" data-slide-to="0" class="active"></li>
-		    <li data-target="#demo" data-slide-to="1"></li>
-		    <li data-target="#demo" data-slide-to="2"></li>
-		  </ul>
-		  
-		  <!-- The slideshow -->
-		  <!--<div class="carousel-inner">
-
-		  	<?php
-	  			$count = 0;
-			  	while($row = $result->fetch_assoc()) {
-			  		if ($count == 0) {
-				  		?>
-						<div class="item active">
-				    		<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>">
-				    	</div>
-						<?php
-						$count += 1;
-			  		}
-			  		else {
-					?>
-					<div class="item">
-						<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>">
-					</div>
-					<?php
-					}
-				}
-			?>
-		    <div class="item">
-		      <img src="download.png">
-		    </div>
-		  </div>
-		  
-		  <!-- Left and right controls -->
-		  <!--<a class="left carousel-control" href="#demo" data-slide="prev">
-		    <span class="glyphicon glyphicon-chevron-left"></span>
-		  </a>
-		  <a class=" right carousel-control" href="#demo" data-slide="next">
-		    <span class="glyphicon glyphicon-chevron-right"></span>
-		  </a>
-		</div>-->
   </div>
 </form>
 </div>

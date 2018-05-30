@@ -5,6 +5,14 @@
   	GROUP BY g.galerieID";
   	$result = getValue("cfg_db")->query($sql);
 
+  	$dir = "../images/thumb/";
+  	$image_names = array();
+   	$k = 0;
+  	foreach (glob("{$dir}*.{jpg, png, jpeg, gif}", GLOB_BRACE) as $key) {
+  		$image_names[$k] = substr($key, -5, -4);
+  		$k++;
+  	}
+  	$images = glob("{$dir}*.{jpg, png, jpeg, gif}", GLOB_BRACE);
 ?>
 
 <div class="col-md-12">
@@ -24,6 +32,7 @@
 	  	</div>
   	</div>
   		<?php
+  		$i = 0;
 		while($row = $result->fetch_assoc()) {
 		?>
 		<div class="panel panel-default">
@@ -49,7 +58,18 @@
 					  	<button name="btnGalerieBearbeiten" value="<?php echo $row['galerieID'] ?>" class="btn btn-success">Speichern</button>
 				  	</div>
 			  	</div>
-		  		<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>" id="upl_image" style="height: 200px;">
+		  		<?php
+		  		if($image_names == null) {}
+		  		else {
+		  			if(in_array($row['bilderID'], $image_names)) {
+							$num = $images[$i];
+	  				?>
+			  			<img src="<?php echo $num; ?>" id="upl_image">
+			  		<?php
+			  		}
+	  				$i += 1;
+  				}
+		  		?>
 		  		<p><?php echo $row["beschreibung"]; ?></p>
 		  	</div>
 	  	</div>

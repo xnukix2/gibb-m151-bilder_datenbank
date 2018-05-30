@@ -75,19 +75,11 @@ function db_galerie_bearbeiten($name, $beschreibung, $galerieID) {
   sqlQuery($sql);
 }
 
-/*function db_uploadImage() {
-  $imgData =addslashes(file_get_contents($_FILES['userImage']['tmp_name']));
-  $imageProperties = getImageSize($_FILES['userImage']['tmp_name']);
-  
-  $sql = "INSERT INTO bilder(name, datei, galerieID)
-  VALUES('{$imageProperties['mime']}', '{$imgData}', '1')";
-  //$sql = "INSERT INTO bilder(name, datei, galerieID)
-  //VALUES ('".escapeSpecialChars($imageProperties['mime'])."', '".escapeSpecialChars($imgData)."', '1')";
-  $current_id = mysqli_query(getValue("cfg_db"), $sql);
-  if(isset($current_id)) {
-    header("Location: ".$_SERVER['PHP_SELF']."?id=galerien");
-  }
-}*/
+function db_uploadImage($bildName, $gid) {
+  $sql = "INSERT INTO bilder(name, galerieID)
+  VALUES('".$bildName."', '".$gid."')";
+  sqlQuery($sql);
+}
 
 function db_bild_bearbeiten($name, $bildID) {
   $sql = "UPDATE bilder SET name='".$name."'
@@ -99,6 +91,22 @@ function db_bild_löschen($bildID) {
   $sql = "DELETE FROM bilder
   WHERE bilderID=".$bildID;
   sqlQuery($sql);
+}
+
+function db_getImageById($bildID) {
+  $sql = "SELECT bilderID FROM bilder WHERE bilderID=".$bildID; 
+  $result = mysqli_query(getValue("cfg_db"), $sql);
+  $row = mysqli_fetch_assoc($result);
+  $bildID = $row['bilderID'][0];
+  return $bildID;
+}
+
+function db_getLatestImage() {
+  $sql = "SELECT bilderID FROM bilder ORDER BY bilderID DESC LIMIT 0,1"; 
+  $result = mysqli_query(getValue("cfg_db"), $sql);
+  $row = mysqli_fetch_assoc($result);
+  $bilderID = $row['bilderID'][0];
+  return $bilderID;
 }
 
 function db_getImages() {

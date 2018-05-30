@@ -4,11 +4,48 @@
   	LEFT JOIN galerie AS g ON b.galerieID = g.galerieID
   	WHERE g.galerieID = ".$gid."
   	ORDER BY b.bilderID";
-  	//WHERE g.galerieID = ".$gid."
-  	$result = getValue("cfg_db")->query($sql);
-  	$result2 = getValue("cfg_db")->query($sql);
-  	$result3 = getValue("cfg_db")->query($sql);
 
+  	$result = getValue("cfg_db")->query($sql);
+
+  	//Thumbnail
+  	$dir_thumb = "../images/thumb/";
+  	$image_path_thumb = glob("{$dir_thumb}*.{jpg, png, jpeg, gif}", GLOB_BRACE);
+
+  	$i=0;
+  	while($row = $result->fetch_assoc()) {
+   		$var_thumb[$i] = $row['bilderID'];
+  		$i++;
+  	}
+  	mysqli_data_seek($result, 0);
+
+	while($row = $result->fetch_assoc()) {
+	   	for ($i=0; $i < count($var_thumb); $i++) { 
+	   		if (in_array($row['bilderID'], $var_thumb)) {
+	   			$image_path_galerie_thumb[$i] = $dir_thumb.$var_thumb[$i].".jpg";
+	   		}
+	   	}
+	}
+  	mysqli_data_seek($result, 0);
+
+	//Origin
+	$dir_origin = "../images/origin/";
+  	$image_path_origin = glob("{$dir_origin}*.{jpg, png, jpeg, gif}", GLOB_BRACE);
+
+  	$i=0;
+  	while($row = $result->fetch_assoc()) {
+   		$var_origin[$i] = $row['bilderID'];
+  		$i++;
+  	}
+  	mysqli_data_seek($result, 0);
+
+	while($row = $result->fetch_assoc()) {
+	   	for ($i=0; $i < count($var_origin); $i++) { 
+	   		if (in_array($row['bilderID'], $var_origin)) {
+	   			$image_path_galerie_origin[$i] = $dir_origin.$var_origin[$i].".jpg";
+	   		}
+	   	}
+	}
+  	mysqli_data_seek($result, 0);
 ?>
 
 <div class="col-md-12">
@@ -28,7 +65,8 @@
 
 	<div class="row">
   	<?php
-  	while($row = $result3->fetch_assoc()) {
+  	$i = 0;
+  	while($row = $result->fetch_assoc()) {
   	?>
   		<div class="col-sm-4">
   		<div class="panel panel-default">
@@ -42,7 +80,7 @@
 		        	<span class="glyphicon glyphicon-trash"></span>
 		        </button>
 		  	</div>
-		  	<div class="panel-body">
+		  	<div class="panel-body" style="text-align: center;">
 		  		<div id="bearbeiten<?php echo $row['bilderID'] ?>" class="collapse panel panel-default">
 				  	<div class="panel-body">
 				  		<p>Bild Name:</p>
@@ -51,14 +89,21 @@
 				  	</div>
 			  	</div>
 		  		<button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal">
-		  			<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>" id="upl_image" style="height: 200px; clip: rect(0, 200px, 200px, 0);">
+		  			<?php
+		  			if(in_array($row['bilderID'], $var_thumb)) {
+  						$num = $image_path_galerie_thumb[$i];
+  					?>
+		  				<img src="<?php echo $num; ?>" id="upl_image">
+		  			<?php
+		  			}
+  					$i += 1;
+		  			?>
 		  		</button>
 		  	</div>
 	  	</div>
 	  	</div>
-  	<?php
-  	}
-  	?>
+  	<?php }
+  	mysqli_data_seek($result, 0); ?>
   	</div>
   	<div class="modal fade" id="modal" role="dialog">
 	    <div class="modal-dialog">
@@ -80,28 +125,47 @@
 						  		}
 						  		$count += 1;
 						  	}
+						  	mysqli_data_seek($result, 0);
 						  	?>
 						</ol>
 						<div class="carousel-inner">
 						  	<?php
-					  			$var = 0;
-							  	while($row = $result2->fetch_assoc()) {
-							  		if ($var == 0) {
+					  			$r = 0;
+					  			$i = 0;
+							  	while($row = $result->fetch_assoc()) {
+							  		if ($r == 0) {
 								  		?>
 										<div class="item active">
-								    		<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>">
+								    		<?php
+								  			if(in_array($row['bilderID'], $var_origin)) {
+						  						$num = $image_path_galerie_origin[$i];
+						  					?>
+								  				<img src="<?php echo $num; ?>" id="upl_image">
+								  			<?php
+								  			}
+						  					$i += 1;
+								  			?>
 								    	</div>
 										<?php
-										$var += 1;
+										$r += 1;
 							  		}
 							  		else {
 									?>
 									<div class="item">
-										<img src="imageView.php?image_id=<?php echo $row["bilderID"]; ?>">
+										<?php
+							  			if(in_array($row['bilderID'], $var_origin)) {
+					  						$num = $image_path_galerie_origin[$i];
+					  					?>
+							  				<img src="<?php echo $num; ?>" id="upl_image">
+							  			<?php
+							  			}
+					  					$i += 1;
+							  			?>
 									</div>
 									<?php
 									}
 								}
+								mysqli_data_seek($result, 0);
 							?>
 						</div>
 						  
