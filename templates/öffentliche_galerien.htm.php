@@ -5,6 +5,7 @@
   	$result = getValue("cfg_db")->query($sql);
 
   	$dir = "../images/thumb/";
+  	$image_names = array();
    	$k = 0;
   	foreach (glob("{$dir}*.{jpg, png, jpeg, gif}", GLOB_BRACE) as $key) {
   		$image_names[$k] = substr($key, -5, -4);
@@ -29,13 +30,16 @@
 		  	</div>
 		  	<div class="panel-body">
 		  		<?php
-	  			if(in_array($row['bilderID'], $image_names)) {
-						$num = $images[$i];
-  				?>
-		  			<img src="<?php echo $num; ?>" id="upl_image">
-		  		<?php
-		  		}
-  				$i += 1;
+		  		if($image_names == null) {}
+		  		else {
+		  			if(in_array($row['bilderID'], $image_names)) {
+							$num = $images[$i];
+	  				?>
+			  			<img src="<?php echo $num; ?>" id="upl_image">
+			  		<?php
+			  		}
+	  				$i += 1;
+	  			}
 		  		?>
 		  		<p><?php echo $row["beschreibung"]; ?></p>
 		  	</div>
